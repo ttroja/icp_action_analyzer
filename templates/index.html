@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+		<head>
+				<title>Issue with Flask</title>
+				<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+				<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+				<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+				<style type="text/css">
+            body{width:95%; font-size:18px}
+						.menu_div{float:left; width:100%; height:35px}
+						.action_name{float:left; margin:0 auto; width:15%; height:100%}
+						.video_name{float:left; margin:0 auto; width:25%; height:100%}
+						.video_name input{width:75%}
+						.submit{float:left; padding-left:5px; width:5%; height:100%}
+						.show_div{float:left; width:100%; height:auto}
+						.menu_div select{padding-left:5px;}
+						.div_report{float:left; width:45%}
+						.div_video{float:left; width:50%}
+						#img_path{width:100%}
+						#video_path{width:100%; padding-top:2%}
+				</style>
+		</head>
+		<body style="margin=auto">
+				<div class="menu_div">
+						<div class="action_name">
+								<label class="menu_label">动作类型:</label>
+								<select id="action_name">
+										<option value ="smoke">Smoke</option>
+										<option value ="yawn">Yawn</option>
+										<option value ="drink">Drink</option>
+										<option value ="phone_call">PhoneCall</option>
+										<option value ="eye_close">EyeClose</option>
+								</select>
+						</div>
+						<div class="video_name">
+								<label class="menu_label">视频名称:</label>
+								<input type="text" id="video_name"/>
+						</div>
+						<div class="submit">
+								<button type="button" id="btnQuery">查询</button>
+						</div>
+				</div>
+				<div class="show_div">
+						<div class="div_report">
+						   <img id="img_path" src="" />
+						</div>
+						<div class="div_video">
+						   <video id="video_path" src="" controls="controls">Video not supported!</video>
+						</div>
+				</div>
+				<script type="text/javascript">
+						$('#btnQuery').bind("click", function(){
+								console.log("key press");
+								var action_name = $("#action_name").val();
+								var video_name = $("#video_name").val();	
+								console.log(action_name);
+								console.log(video_name);
+								$.ajax({
+										type:"GET",
+										url:"/plot",
+										data:{
+												action_name:action_name,
+												video_name:video_name
+										},
+										dataType:"json",
+										success:function(data){
+												console.log(data);
+												if(data.status < 0){
+														alert(data.msg);
+												}else{
+														$("#img_path").attr("src", data.img_path);
+														$("#video_path").attr("src", data.video_path);
+												}
+										},
+										error:function(data){
+												alert("error from server");
+										},
+								});
+						});
+        </script>
+		</body>
+</html>
